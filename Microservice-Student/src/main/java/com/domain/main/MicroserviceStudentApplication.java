@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 
 import com.domain.main.model.Student;
 import com.domain.main.repository.StudentRepository;
-
 import reactor.core.publisher.Flux;
 
 @SpringBootApplication

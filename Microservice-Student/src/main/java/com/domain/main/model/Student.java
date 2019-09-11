@@ -19,4 +19,5 @@ public class Student {
 	private String Type_doc;
 	private String document;
 
+
 }
