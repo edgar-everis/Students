@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Bean;
 import com.domain.main.model.Student;
 import com.domain.main.repository.StudentRepository;
 import reactor.core.publisher.Flux;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
 
+@EnableSwagger2WebFlux//agregar esta anotacion para habilitar el swagger
 @SpringBootApplication
 public class MicroserviceStudentApplication {
 	

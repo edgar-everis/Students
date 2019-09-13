@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,34 +22,43 @@ import reactor.core.publisher.Mono;
 
 
 @RestController
+@RequestMapping("/api/Student")
 public class StudentController {
 
-	@Autowired 
-	private StudentService stuservice;
 	
+	private final  StudentService stuservice;
+	
+	@Autowired 
+	public StudentController( final StudentService stuservice) {
+		// TODO Auto-generated constructor stub
+	this.stuservice = stuservice;
+		
+	}
+
 	//Lista todos los estudiantes
-	@RequestMapping("/Student")
+	//@RequestMapping("/Student")
+	@GetMapping
 	public Flux<Student> getall()
 	{
 		return stuservice.getAll();
 	}
 	
 	//Lista los estudiantes por nombre
-	@GetMapping("/Student/fullname")
-	public Flux <Student> findbyFullname(@RequestParam("filter") String filter)
+	@GetMapping("/fullname/{fullname}")
+	public Flux <Student> findbyFullname(@PathVariable String fullname)
 	{
-		return stuservice.findbyfullname(filter);
+		return stuservice.findbyfullname(fullname);
 	}
 	
 	//lista los estudiantes por documento
-	@GetMapping("/Student/document")
-	public Flux <Student> findbyDocument(@RequestParam("number") String number)
+	@GetMapping("/document/{number}")
+	public Flux <Student> findbyDocument(@PathVariable String number)
 	{
 		return stuservice.findbydocument(number);
 	}
 	
 	//Crea un nuevo estudiante
-	@PostMapping("/Student/create")
+	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Mono<Student> createStudent(@RequestBody Student student)
 	{
@@ -58,14 +67,14 @@ public class StudentController {
 	}
 	
 	//Actualiza un estudiante
-	@PutMapping("/Student/update/{id}")
+	@PutMapping("/update/{id}")
 	public Mono<Student> updateStudent(@PathVariable String id,@RequestBody Student student)
 	{
 	return stuservice.modifyStudent(id, student);
 		}
 	
 	//Elimina un estudiante
-	@DeleteMapping("/Student/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public Mono<Void> deleteStudents(@PathVariable String id) {
 			

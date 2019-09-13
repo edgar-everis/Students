@@ -1,13 +1,20 @@
 package com.domain.main.model;
 
+
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+
 @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@Builder(toBuilder = true)
 @Document(collection = "Student")
 public class Student {
 	
@@ -18,6 +25,8 @@ public class Student {
 	private String birthday;
 	private String Type_doc;
 	private String document;
+	
+	
 
 
 }

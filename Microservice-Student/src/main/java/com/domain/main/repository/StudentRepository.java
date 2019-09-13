@@ -9,11 +9,13 @@ import com.domain.main.model.Student;
 import reactor.core.publisher.Flux;
 
 
+
 @Repository
 public interface StudentRepository extends ReactiveMongoRepository<Student, String> {
 
 	@Query("{ 'fullname' : ?0}")
 	Flux<Student> findbyfullname(String fullname);
+
 	
 	@Query("{ 'document' : ?0}")
 	Flux<Student> findbydocument(String document);
