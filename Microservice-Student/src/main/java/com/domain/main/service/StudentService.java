@@ -11,7 +11,7 @@ public interface StudentService {
 
 	Flux<Student> getAll();
 	
-	Flux<Student> findbyfullname(String fullname);
+	Mono<Student> findbyfullname(String fullname);
 	
 	
     Flux<Student> findbydocument(String document);

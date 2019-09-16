@@ -45,7 +45,7 @@ public class StudentController {
 	
 	//Lista los estudiantes por nombre
 	@GetMapping("/fullname/{fullname}")
-	public Flux <Student> findbyFullname(@PathVariable String fullname)
+	public Mono<Student> findbyFullname(@PathVariable String fullname)
 	{
 		return stuservice.findbyfullname(fullname);
 	}

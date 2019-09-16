@@ -1,94 +1,109 @@
 package com.domain.main;
-import static org.mockito.Mockito.when;
 
 
-import java.util.Arrays;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import static org.junit.Assert.assertEquals;
+
+import org.hibernate.validator.internal.util.logging.LoggerFactory;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.reactivestreams.Publisher;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.domain.main.controller.StudentController;
 import com.domain.main.model.Student;
-import com.domain.main.service.StudentServImpl;
+import com.domain.main.repository.StudentRepository;
 
+import ch.qos.logback.classic.Logger;
 import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
+@SpringBootTest
+@AutoConfigureWebTestClient
+@RunWith(SpringRunner.class)
+public class StudentControllerTest {
 
-
-@ExtendWith(SpringExtension.class)
-class StudentControllerTest {
-
-	  @Mock
-	  private StudentServImpl studentservice;
-	  private WebTestClient client;
-	  private List <Student> expectedstudents;
+	@Autowired
+    private WebTestClient webTestClient;
 	
-	@BeforeEach
-	void setUp() throws Exception {
-		client = WebTestClient
-		        .bindToController(new StudentController(studentservice))
-		        .configureClient()
-		        .baseUrl("/api/Student")
-		        .build();
+	/*@Autowired
+    private StudentRepository repo;
 
-		    expectedstudents =  Arrays.asList(
-		    		Student.builder().id("1").fullname("juan").gender("M").birthday("05/02/1987").Type_doc("dni").document("123456").build(),
-		    		Student.builder().id("2").fullname("Juan").gender("M").birthday("06/02/1990").Type_doc("dni").document("666666").build(),
-		    		Student.builder().id("3").fullname("Jose").gender("M").birthday("01/02/1992").Type_doc("dni").document("77777").build(),
-		    		Student.builder().id("4").fullname("Andres").gender("M").birthday("01/02/1998").Type_doc("dni").document("888888").build(),
-		    		Student.builder().id("5").fullname("Pepe").gender("M").birthday("01/02/1996").Type_doc("dni").document("9999999").build()
-		    		);
+    private final Student one = new Student("1", "Edgar12","M","12/05/1987","dni","123456");
+    private final Student two = new Student("2", "Gonzalo","M","12/05/1987","dni","999999");
+    private final Student three = new Student("3", "marco","M","12/05/1987","dni","666666");*/
+	private StudentRepository sturepositroy;
+	
+	 
+	
+	@Bean
+	  CommandLineRunner start(StudentRepository sturepository){
+		
+	    return args -> {
+	    	 sturepositroy.deleteAll();
+	      Flux.just(
+	          new Student("1","edgar","Masculino","05/02/1988","dni","6666"),
+	          new Student("2","gonzalo","Masculino","06/03/1990","dni","777"),
+	          new Student("3","Jose","Masculino", "02/04/1986","dni" ,"22222"),
+	          new Student("4","marcos","Masculino","01/06/1986","dni","55555")
+	         )
+	        .flatMap(sturepository::save);
+	       
+
+	    };
+	 }
+	
+	@Test
+	public void testGetall() {
+		  webTestClient.get().uri("/api/Student")
+          .accept(MediaType.APPLICATION_JSON_UTF8)
+          .exchange()
+          .expectStatus().isOk()
+          .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+          .expectBodyList(Student.class)
+          .hasSize(2);
+	}
+
+	
+	@Test
+	public void testFindbyFullname() {
+		 Student expectedValue = new Student("1", "Carlos","M", "02/05/1987", "dni", "123456");
+
+	        webTestClient.get().uri("/fullname/Gonzalo")
+	                .accept(MediaType.APPLICATION_JSON_UTF8)
+	                .exchange()
+	                .expectStatus().isOk()
+	                .expectBody(Student.class)
+	                .consumeWith((response) -> {
+	                    assertEquals(expectedValue, response.getResponseBody());
+	                });
+
 	}
 
 	@Test
-	void testGetall() {
-		when(studentservice.getAll()).thenReturn(Flux.fromIterable(expectedstudents));
-
-	    client.get().uri("/").exchange()
-	        .expectStatus().isOk()
-	        .expectBodyList(Student.class).isEqualTo(expectedstudents);
+	public void testFindbyDocument() {
 		
 	}
 
 	@Test
-	void testFindbyFullname() {
-		
-		  
-	        String fullname = "Pedro";	
-		    List<Student> expectedFilteredProducts = Arrays.asList(expectedstudents.get(0));
-		  
-		    when(studentservice.findbyfullname(fullname)).thenReturn(Flux.fromIterable(expectedFilteredProducts));
-
-		    client.get().uri("/fullname/{fullname}", fullname).exchange()
-		        .expectStatus().isOk()
-		        .expectBodyList(Student.class).isEqualTo(expectedFilteredProducts);
-		    System.out.println(expectedstudents.get(0).getFullname());
-		
-	}
-
-	@Test
-	void testFindbyDocument() {
+	public void testCreateStudent() {
 		 
+	}
+
+	@Test
+	public void testUpdateStudent() {
 		
 	}
 
 	@Test
-	void testCreateStudent() {
-		
-	}
-
-	@Test
-	void testUpdateStudent() {
-		
-	}
-
-	@Test
-	void testDeleteStudents() {
+	public void testDeleteStudents() {
 		
 	}
 

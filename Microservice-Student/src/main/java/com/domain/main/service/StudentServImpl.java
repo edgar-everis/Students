@@ -23,7 +23,7 @@ public class StudentServImpl implements StudentService{
 	}
 
 	@Override
-	public Flux<Student> findbyfullname(String fullname) {
+	public Mono <Student> findbyfullname(String fullname) {
 		// TODO Auto-generated method stub
 		//return studentrepository.findbyfullname(fullname);
 		return studentrepository.findbyfullname(fullname);

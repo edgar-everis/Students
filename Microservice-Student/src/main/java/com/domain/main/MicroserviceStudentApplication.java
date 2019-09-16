@@ -17,7 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
 @SpringBootApplication
 public class MicroserviceStudentApplication {
 	
-	@Autowired
+	/*@Autowired
 	private StudentRepository sturepositroy;
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	 
@@ -37,7 +37,7 @@ public class MicroserviceStudentApplication {
 	        .subscribe(Student -> log.info("Student: {}", Student));
 
 	    };
-	  }
+	 } */
 	public static void main(String[] args) {
 		SpringApplication.run(MicroserviceStudentApplication.class, args);
 	}

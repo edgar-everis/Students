@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import com.domain.main.model.Student;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 
 
 
@@ -14,7 +16,7 @@ import reactor.core.publisher.Flux;
 public interface StudentRepository extends ReactiveMongoRepository<Student, String> {
 
 	@Query("{ 'fullname' : ?0}")
-	Flux<Student> findbyfullname(String fullname);
+	Mono<Student> findbyfullname(String fullname);
 
 	
 	@Query("{ 'document' : ?0}")
