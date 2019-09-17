@@ -11,12 +11,12 @@ public interface StudentService {
 
 	Flux<Student> getAll();
 	
-	Mono<Student> findbyfullname(String fullname);
+	Mono<Student> findByFullname(String fullname);
 	
 	
-    Flux<Student> findbydocument(String document);
+    Mono<Student> findByDocument(String document);
     
-    Mono<Student> findById(String id);
+   // Mono<Student> findById(String id);
     
     Mono<Student> createStudent( Student student);
   

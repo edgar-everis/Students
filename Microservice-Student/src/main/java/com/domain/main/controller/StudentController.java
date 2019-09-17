@@ -47,14 +47,14 @@ public class StudentController {
 	@GetMapping("/fullname/{fullname}")
 	public Mono<Student> findbyFullname(@PathVariable String fullname)
 	{
-		return stuservice.findbyfullname(fullname);
+		return stuservice.findByFullname(fullname);
 	}
 	
 	//lista los estudiantes por documento
 	@GetMapping("/document/{number}")
-	public Flux <Student> findbyDocument(@PathVariable String number)
+	public Mono <Student> findbyDocument(@PathVariable String number)
 	{
-		return stuservice.findbydocument(number);
+		return stuservice.findByDocument(number);
 	}
 	
 	//Crea un nuevo estudiante
@@ -68,6 +68,7 @@ public class StudentController {
 	
 	//Actualiza un estudiante
 	@PutMapping("/update/{id}")
+	@ResponseStatus(HttpStatus.CREATED)
 	public Mono<Student> updateStudent(@PathVariable String id,@RequestBody Student student)
 	{
 	return stuservice.modifyStudent(id, student);
